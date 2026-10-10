@@ -10,10 +10,28 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": { "package": "com.mathsprint.app" },
-    "plugins": ["expo-router", "expo-audio"],
+    "android": {
+      "package": "com.mathsprint.app",
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-audio"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ad4afd57-dcff-4ed5-8ef9-693b88507a15"
+      }
+    },
+    "owner": "developer75"
   }
 }
