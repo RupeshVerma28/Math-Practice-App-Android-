@@ -1,22 +1,17 @@
 {
   "expo": {
-    "name": "mathsprint",
+    "name": "MathSprint",
     "slug": "mathsprint",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "dark",
+    "scheme": "mathsprint",
     "ios": {
       "supportsTablet": true
     },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      }
-    },
+    "android": { "package": "com.mathsprint.app" },
+    "plugins": ["expo-router", "expo-audio"],
     "web": {
       "favicon": "./assets/favicon.png"
     }

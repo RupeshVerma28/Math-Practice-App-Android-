@@ -1,0 +1,8 @@
+import { router } from 'expo-router';
+import { Brain, Grid3X3, Hash, Box } from 'lucide-react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Screen } from '../../components/Screen';
+import { TopicCard } from '../../components/TopicCard';
+import { colors, spacing } from '../../constants/theme';
+export default function LearnHome() { return <Screen><Text style={styles.kicker}>LEARN</Text><Text style={styles.title}>Understand the patterns.</Text><Text style={styles.subtitle}>Choose a short lesson. Everything is available offline, whenever you are ready.</Text><View style={styles.list}><TopicCard title="Multiplication tables" description="Build confidence with tables 1 through 30." icon={Grid3X3} color={colors.cyan} onPress={() => router.push('/learn/tables')} /><TopicCard title="Squares" description="Explore squares from 1² to 100²." icon={Hash} color={colors.violet} onPress={() => router.push('/learn/squares')} /><TopicCard title="Cubes" description="Master cubes from 1³ to 30³." icon={Box} color={colors.green} onPress={() => router.push('/learn/cubes')} /><TopicCard title="Mental math tricks" description="Friendly methods with conditions and examples." icon={Brain} color={colors.amber} onPress={() => router.push('/learn/mental-math')} /></View></Screen>; }
+const styles = StyleSheet.create({ kicker: { color: colors.cyan, fontWeight: '900', fontSize: 12, letterSpacing: 1.4, marginTop: spacing.md, marginBottom: 8 }, title: { color: colors.text, fontSize: 30, lineHeight: 37, fontWeight: '900' }, subtitle: { color: colors.muted, lineHeight: 21, fontSize: 15, marginTop: 10, marginBottom: 25 }, list: { marginTop: 2 } });
