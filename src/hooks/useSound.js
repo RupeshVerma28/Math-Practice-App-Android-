@@ -1,22 +1,54 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { createAudioPlayer, setAudioModeAsync } from 'expo-audio';
+import { soundUris } from '../constants/soundAssets';
 
-// A compact original WAV tone bundled as a data URI; it never downloads from a network.
-const ping = 'data:audio/wav;base64,UklGRpwAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YXgAAACAg4qSlZCBbFdKS1x7osXa0bSIWzcnLUp1osfZ1LiOYDsnK0ZvncTY1r2UZj4oKkFqmMDX18GZa0IqKD1kkrzV2MSecUcsJzpfjbfT2cikdksuJjZah7PR2supfFAwJjNWgajCyLuhgWRSTldpfpCbnZeMgXp3eX0=';
+let audioModeConfigured = false;
 
-export function useSound(enabled) {
+export function useSound(enabled = true) {
+  const activePlayers = useRef(new Set());
+
   useEffect(() => {
-    if (enabled) setAudioModeAsync({ playsInSilentMode: true }).catch((error) => console.warn('MathSprint audio mode unavailable:', error?.message));
-  }, [enabled]);
-  const play = () => {
-    if (!enabled) return;
-    try {
-      const player = createAudioPlayer(ping);
-      player.play();
-      setTimeout(() => player.remove(), 450);
-    } catch (error) {
-      console.warn('MathSprint sound unavailable:', error?.message);
+    if (enabled && !audioModeConfigured) {
+      setAudioModeAsync({ playsInSilentMode: true })
+        .then(() => {
+          audioModeConfigured = true;
+        })
+        .catch((error) => console.warn('MathSprint audio mode setup:', error?.message));
     }
-  };
-  return { play };
+  }, [enabled]);
+
+  useEffect(() => {
+    const players = activePlayers.current;
+    return () => {
+      players.forEach((player) => {
+        try {
+          player.remove();
+        } catch (_) {}
+      });
+      players.clear();
+    };
+  }, []);
+
+  const playTone = useCallback((uri, durationMs = 500) => {
+    if (!enabled || !uri) return;
+    try {
+      const player = createAudioPlayer(uri);
+      activePlayers.current.add(player);
+      player.play();
+      setTimeout(() => {
+        try {
+          player.remove();
+        } catch (_) {}
+        activePlayers.current.delete(player);
+      }, durationMs);
+    } catch (error) {
+      console.warn('MathSprint audio playback error:', error?.message);
+    }
+  }, [enabled]);
+
+  const playCorrect = useCallback(() => playTone(soundUris.correct, 350), [playTone]);
+  const playIncorrect = useCallback(() => playTone(soundUris.incorrect, 350), [playTone]);
+  const playComplete = useCallback(() => playTone(soundUris.complete, 650), [playTone]);
+
+  return { playCorrect, playIncorrect, playComplete };
 }
